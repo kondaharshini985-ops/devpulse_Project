@@ -145,7 +145,7 @@ Use Postman to test APIs:
 Add JWT token in header:
 
 ```
-Authorization: Bearer <token>
+🔐 Authentication: JWT Token (Bearer Token in Authorization header)
 ```
 
 ---
