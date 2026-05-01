@@ -50,6 +50,7 @@ src/main/java/com/example
 
 ---
 
+
 ## 🔑 Authentication Flow
 
 1. User registers
@@ -60,28 +61,42 @@ src/main/java/com/example
 ---
 
 ## 📡 API Endpoints (Sample)
+## 📡 API Endpoints
 
-### 🔐 Auth
+### 🌐 Public APIs (No authentication required)
+Anyone can access these endpoints:
 
-* POST `/auth/register`
-* POST `/auth/login`
-
-### 💡 Ideas
-
-* POST `/ideas`
-* GET `/ideas`
-* GET `/ideas/{id}`
-
-### 🛠 Implementation
-
-* POST `/implementation`
-* GET `/implementation/{id}`
-
-### 🗳 Voting
-
-* POST `/vote/toggle`
+POST   /api/users                  → Register user  
+POST   /api/auth/login             → Login  
+GET    /api/ideas                  → Get all ideas  
+GET    /api/ideas/trending         → Get trending ideas  
+GET    /api/ideas/latest           → Get latest ideas  
+GET    /api/implementations/idea/{id} → Get implementations by idea  
+GET    /api/implementations/trending  → Get trending implementations  
 
 ---
+
+### 👤 User APIs (Authentication required)
+Accessible only by logged-in users:
+
+POST   /api/ideas                 → Create idea  
+POST   /api/implementations       → Submit implementation  
+POST   /api/votes                 → Toggle vote  
+PUT    /api/ideas/{id}            → Update own idea  
+PUT    /api/implementations/{id}  → Update own implementation  
+DELETE /api/ideas/{id}            → Delete own idea  
+DELETE /api/implementations/{id}  → Delete own implementation  
+
+---
+
+### 🛠️ Admin APIs (Admin only)
+Accessible only by admin users:
+
+DELETE /api/users/{id}            → Delete any user  
+GET    /api/users                 → Get all users  
+GET    /api/users/{id}            → Get user by ID  
+DELETE /api/ideas/{id}            → Delete any idea  
+DELETE /api/implementations/{id}  → Delete any implementation  
 
 ## ▶️ How to Run the Project
 
