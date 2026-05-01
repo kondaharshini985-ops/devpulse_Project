@@ -147,7 +147,17 @@ Add JWT token in header:
 ```
 🔐 Authentication: JWT Token (Bearer Token in Authorization header)
 ```
+### 🔑 Example Request (Login)
 
+POST /api/auth/login
+
+Request Body:
+```json
+{
+  "username": "user1",
+  "password": "password123"
+}
+```
 ---
 
 ## 🚀 Future Improvements
