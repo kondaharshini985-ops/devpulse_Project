@@ -154,7 +154,7 @@ POST /api/auth/login
 Request Body:
 ```json
 {
-  "username": "user1",
+  "email": "abc@gmail.com",
   "password": "password123"
 }
 ```
