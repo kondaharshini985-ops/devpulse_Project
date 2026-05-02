@@ -98,6 +98,14 @@ GET    /api/users/{id}            → Get user by ID
 DELETE /api/ideas/{id}            → Delete any idea  
 DELETE /api/implementations/{id}  → Delete any implementation  
 
+## 📄 API Documentation
+
+The API documentation is available via Swagger UI:
+
+🔗 http://localhost:1010/swagger-ui/index.html
+
+Use this interface to explore and test all available endpoints.
+
 ## ▶️ How to Run the Project
 
 ### 1️⃣ Clone the repository
