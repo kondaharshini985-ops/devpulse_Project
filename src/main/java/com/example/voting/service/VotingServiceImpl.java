@@ -50,8 +50,9 @@ public class VotingServiceImpl implements VotingService{
 
 		    if (exists) {
 		        // 🔴 UNVOTE (delete)
+		    	
 		    	Implementation imp = impRepo.findById(implementationId)
-		                .orElseThrow(() -> new ResourseNotFoundException("Implementation not found"));
+		    	        .orElseThrow(() -> new ResourseNotFoundException("Implementation not found"));
 
 		        Voting vote = voteRepo
 		                .findByUser_IdAndImplementation_Id(user.getId(), implementationId)
@@ -68,8 +69,8 @@ public class VotingServiceImpl implements VotingService{
 		        // 🟢 VOTE (create)
 
 		       
-		        Implementation imp = impRepo.findById(implementationId)
-		                .orElseThrow(() -> new ResourseNotFoundException("Implementation not found"));
+		    	Implementation imp = impRepo.findById(implementationId)
+		    	        .orElseThrow(() -> new ResourseNotFoundException("Implementation not found"));
 
 		        Voting vote = Voting.builder()
 		                .user(user)

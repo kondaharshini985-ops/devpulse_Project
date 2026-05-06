@@ -20,6 +20,7 @@ import com.example.idea.dto.TrendingIdeaDTO;
 import com.example.idea.entity.Idea;
 
 import com.example.idea.repository.IdeaRepo;
+import com.example.implementation.repository.ImplementationRepo;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepo;
 
@@ -28,12 +29,15 @@ import com.example.user.repository.UserRepo;
 @Service
 public class IdeaServiceImpl implements IdeaService{
 
-	private IdeaRepo repo;
-	private UserRepo urepo;
+	private final  IdeaRepo repo;
+	private final  UserRepo urepo;
+	private  final ImplementationRepo irepo;
 	
-	public IdeaServiceImpl(IdeaRepo repo,UserRepo urepo) {
+	public IdeaServiceImpl(IdeaRepo repo,UserRepo urepo,ImplementationRepo irepo) {
 this.repo=repo;
 this.urepo=urepo;
+this.irepo = irepo;
+
 	}
 	 // 🔥 Helper - get current logged in user from token
     private User getCurrentUser() {
@@ -72,7 +76,7 @@ this.urepo=urepo;
 //		    					 idea.getDifficulty(),
 //		    					 idea.getCreatedBy().getId()))
 //		    			        .toList();
-		    	 
+		     
 		List<IdeaResponseDTO> similaridea = new ArrayList<>();
 		 if(!similar.isEmpty()) {
 		for (Idea idea : similar) {
@@ -82,7 +86,8 @@ this.urepo=urepo;
 		            idea.getDescription(),
 		            idea.getTechstack(),
 		            idea.getDifficulty(),
-		            idea.getCreatedBy().getId()
+		            idea.getCreatedBy().getId(),
+		            idea.getImplementations().size() 
 		    );
 
 		    similaridea.add(dto);
@@ -110,7 +115,7 @@ this.urepo=urepo;
 		
 	Idea  savedidea = repo.save(idea);
 	
-	IdeaResponseDTO res = new IdeaResponseDTO( savedidea.getId(),savedidea.getTitle(),savedidea.getDescription(),savedidea.getTechstack(), savedidea.getDifficulty(),savedidea.getCreatedBy().getId());
+	IdeaResponseDTO res = new IdeaResponseDTO( savedidea.getId(),savedidea.getTitle(),savedidea.getDescription(),savedidea.getTechstack(), savedidea.getDifficulty(),savedidea.getCreatedBy().getId(),savedidea.getImplementations().size());
 	
 	
 	 return new IdeaListResponseDTO("Idea Created",null,res);
@@ -121,9 +126,9 @@ this.urepo=urepo;
 	@Override
 	public List<IdeaResponseDTO> getAllIdeas() {
 		 List<Idea> list =repo.findAll();
-		 List<IdeaResponseDTO> response= new ArrayList();
+		 List<IdeaResponseDTO> response= new ArrayList<>();
 		 for(Idea i : list) {
-			IdeaResponseDTO r = new IdeaResponseDTO(i.getId(),i.getTitle(), i.getDescription(),i.getTechstack(),i.getDifficulty(),i.getCreatedBy().getId()) ;
+			IdeaResponseDTO r = new IdeaResponseDTO(i.getId(),i.getTitle(), i.getDescription(),i.getTechstack(),i.getDifficulty(),i.getCreatedBy().getId(),i.getImplementations().size()) ;
 			response.add(r);
 		 }
 		 
@@ -134,7 +139,7 @@ this.urepo=urepo;
 	@Override
 	public IdeaResponseDTO getIdeaById(Long id) {
 		Idea i = repo.findById(id).orElseThrow(() -> new ResourseNotFoundException("Idea not found"));
-		IdeaResponseDTO r = new IdeaResponseDTO(i.getId(),i.getTitle(), i.getDescription(),i.getTechstack(),i.getDifficulty(),i.getCreatedBy().getId());
+		IdeaResponseDTO r = new IdeaResponseDTO(i.getId(),i.getTitle(), i.getDescription(),i.getTechstack(),i.getDifficulty(),i.getCreatedBy().getId(), i.getImplementations().size());
 		return r;
 		
 	}
@@ -143,9 +148,13 @@ this.urepo=urepo;
 	@Override
 	public IdeaResponseDTO updateIdea(Long id, IdeaRequestDTO dto ) {
 		//FINDING EXISTING IDEA
-		Idea existingidea = repo.findById(id).orElseThrow(() -> new ResourseNotFoundException("Idea id not found"));
+		Idea existingidea = repo.findById(id).orElseThrow(() -> new ResourseNotFoundException("Idea not found"));
 		 // we need to update only the fields because the user and id would be the same  they automatically filled in the fields in frontend itself
-		 
+		User currentUser = getCurrentUser();
+		
+		if (!existingidea.getCreatedBy().getId().equals(currentUser.getId())) {
+		    throw new RuntimeException("You can only update your own idea");
+		}
 		 existingidea.setTitle(dto.getTitle());
 		 existingidea.setDescription(dto.getDescription());
 		 existingidea.setDifficulty(dto.getDifficulty());
@@ -154,7 +163,7 @@ this.urepo=urepo;
 		 //save the updated idea in db to replace the fields with new content
 		  Idea updatedIdea = repo.save(existingidea);
 		 //return the response 
-		  IdeaResponseDTO result =new IdeaResponseDTO(updatedIdea.getId(),updatedIdea.getTitle(),updatedIdea.getDescription(),updatedIdea.getTechstack(),updatedIdea.getDifficulty(),updatedIdea.getCreatedBy().getId());
+		  IdeaResponseDTO result =new IdeaResponseDTO(updatedIdea.getId(),updatedIdea.getTitle(),updatedIdea.getDescription(),updatedIdea.getTechstack(),updatedIdea.getDifficulty(),updatedIdea.getCreatedBy().getId(),updatedIdea.getImplementations().size());
 		  return result;
 		
 		  
@@ -226,11 +235,11 @@ this.urepo=urepo;
 
 	@Override
 	public List<IdeaResponseDTO> latestIdeas() {
-	    List<Idea> latest = repo.findLatstIdea(PageRequest.of(0, 5));
+	    List<Idea> latest = repo.findLatestIdea(PageRequest.of(0, 5));
 	    
 	    List<IdeaResponseDTO> list = new ArrayList<>();
 	    for(Idea i : latest) {
-	    	IdeaResponseDTO dto = new IdeaResponseDTO(i.getId(),i.getTitle() , i.getDescription(), i.getTechstack(),i.getDifficulty(),i.getCreatedBy().getId());
+	    	IdeaResponseDTO dto = new IdeaResponseDTO(i.getId(),i.getTitle() , i.getDescription(), i.getTechstack(),i.getDifficulty(),i.getCreatedBy().getId(),i.getImplementations().size());
 	    	
 	    	list.add(dto);
 	    }

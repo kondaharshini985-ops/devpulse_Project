@@ -13,5 +13,6 @@ public class IdeaResponseDTO {
 	 private String techstack;
 	 private String difficulty;
 	 private long user_id;
+	 private int implementationCount; 
 
 }

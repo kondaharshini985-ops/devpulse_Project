@@ -23,7 +23,7 @@ public interface IdeaRepo extends JpaRepository<Idea, Long>{
 	
 	//Latest Idea
 	@Query("SELECT i FROM Idea i ORDER BY i.id DESC")
-	public List<Idea> findLatstIdea(Pageable pageable);
+	public List<Idea> findLatestIdea(Pageable pageable);
 	
 	
  

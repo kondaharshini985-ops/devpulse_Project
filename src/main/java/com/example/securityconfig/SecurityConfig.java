@@ -35,6 +35,10 @@ public class SecurityConfig {
             .cors(cors -> {}) // ✅ FIXED (new syntax)
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+            		 .requestMatchers(
+            	                "/swagger-ui/**",
+            	                "/v3/api-docs/**"
+            	            ).permitAll()
 
                 // ✅ PUBLIC APIs
                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()

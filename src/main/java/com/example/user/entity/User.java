@@ -7,6 +7,7 @@ import java.util.List;
 import com.example.idea.entity.Idea;
 import com.example.implementation.entity.Implementation;
 import com.example.voting.entity.Voting;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -54,11 +55,14 @@ public class User {
 	}
 	
 	@OneToMany(mappedBy = "createdBy",cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Idea> ideas;
 	
     @OneToMany(mappedBy ="submitedBy")
+    @JsonIgnore
     private List<Implementation> impls;
     
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Voting> votes;
 }
