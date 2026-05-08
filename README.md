@@ -180,9 +180,7 @@ Request Body:
 ## 🚀 Future Improvements
 
 * Add frontend (React)
-* API documentation using Swagger
-* Pagination & filtering
-* Docker deployment
+* Integrate Redis caching to improve API response time and reduce database load for frequently accessed data such as top ideas and implementations.
 * Unit & integration testing
 
 ---
